@@ -50,7 +50,7 @@ export default function Page(){
         </main>
     );
 }
-
+khoa dai gia
 function SignInWithGoogleComponent() {  
     const handleLogin = async () => {
         try {
@@ -61,3 +61,4 @@ function SignInWithGoogleComponent() {
     }
     return <Button onClick={handleLogin}>Sign In With Google</Button>;
 }
+
