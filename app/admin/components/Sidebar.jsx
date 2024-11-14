@@ -1,7 +1,11 @@
 "use client";
 
-import { Dog, Layers2, LayoutDashboard, LibraryBig, PackageOpen, ShoppingCart, Star, User } from "lucide-react";
+import { auth } from "@/lib/firebase";
+import { signOut } from "firebase/auth";
+import { Dog, Layers2, LayoutDashboard, LibraryBig, LogOut, PackageOpen, ShieldCheck, ShoppingCart, Star, User } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function Sidebar(){
     const menuList = [
@@ -45,6 +49,11 @@ export default function Sidebar(){
             link :  "/admin/collections",
             icon : <LibraryBig className="h-5 w-5" />,
         },
+        {
+            name : "Admins",
+            link :  "/admin/admins",
+            icon : <ShieldCheck className="h-5 w-5" />,
+        },
     ]
 
     return(
@@ -52,17 +61,49 @@ export default function Sidebar(){
             <div className="flex justify-center">
                  <img className="h-12" src="/logo.png" alt="" />
             </div>
-            <ul className="flex-1 flex flex-col gap-3">
-                {menuList?.map((item)=>{
+            <ul className="flex-1 h-full overflow-y-auto flex flex-col gap-3">
+                {menuList?.map((item , key)=>{
                     return (
-                        <Link href={item?.link}>
-                            <li className="flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-white">
-                                {item?.icon}{item?.name}
-                            </li>
-                        </Link>
+                        <Tab item={item} key={key}/>
                     );
                 })}
             </ul>
+            <div className="flex justify-center">
+                <button onClick={async()=> 
+                    {
+                        try {
+                            await toast.promise(signOut(auth),{
+                                error : (e) => e?.message,
+                                loading : "Loading...",
+                                success : "Successfully Logged out",
+                            })
+                        } catch (error) {
+                            toast.error(error?.message);
+                        }
+                    }
+                } className="flex gap-2 items-center px-4 py-2 
+                                    rounded-xl bg-black text-white w-full 
+                                    hover:bg-red-600 transition-colors duration-300
+                                    justify-center">
+                    <LogOut className="h-5 w-5" />Logout
+                </button>
+            </div>
         </section>
+    )
+}
+
+function Tab({item}) {
+    const pathname = usePathname();
+    const isSelected = pathname === item?.link;
+    return (
+        <Link href={item?.link}>
+                <li className={`flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-white 
+                                ease-soft-spring transition-all duration-300
+                    ${isSelected ? "bg-black text-black" : "bg-black text-black"}
+                    hover:bg-gray-500 hover:text-white transition-colors duration-300`}
+                >
+                     {item?.icon}{item?.name}
+                 </li>
+        </Link>
     )
 }
