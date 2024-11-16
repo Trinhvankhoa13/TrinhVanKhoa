@@ -57,7 +57,7 @@ export default function Sidebar(){
     ]
 
     return(
-        <section className="flex flex-col gap-3 border-r bg-blue-400 px-5 py-3 h-screen overflow-hidden md:w-[220px]">
+        <section className="flex flex-col gap-3 border-r bg-blue-400 px-5 py-3 h-screen overflow-hidden md:w-[220px] z-[1000]">
             <div className="flex justify-center">
                  <img className="h-12" src="/logo.png" alt="" />
             </div>
